@@ -51,10 +51,10 @@ while running:
     screen.fill(black)
     
     
-    play_btn = draw_button("▶ Play", 50, 400, 100, 50)
-    pause_btn = draw_button("⏸ Pause", 200, 400, 100, 50)
-    next_btn = draw_button("⏭ Next", 350, 400, 100, 50)
-    prev_btn = draw_button("⏮ Previous", 50, 300, 150, 50)
+    play_btn = draw_button("Play", 50, 400, 100, 50)
+    pause_btn = draw_button("Pause", 200, 400, 100, 50)
+    next_btn = draw_button("Next", 350, 400, 100, 50)
+    prev_btn = draw_button("Previous", 50, 300, 150, 50)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
