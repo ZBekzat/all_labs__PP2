@@ -43,7 +43,7 @@ while running:
     screen.blit(clock_img, (0, 0))
 
     
-    left_arm_angle = second * (-6)  
+    left_arm_angle = second * (-6)    
     right_arm_angle = minute * (-6)  
 
     
