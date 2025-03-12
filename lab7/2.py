@@ -1,49 +1,70 @@
-
 import pygame
+import os
+
 
 pygame.init()
 screen = pygame.display.set_mode((500, 500))
 black = (0, 0, 0)
 screen.fill(black)
-isDone = True
-index = 0  
-sounds = ["sounds/Mockingbird - Eminem.mp3", "sounds/Tez Cadey - Seve Slow.mp3",
-          "sounds/Sweater Weather - The Neighbourhood.mp3"]
-isPaused = False
-isPlayed = True
 
-while isDone:
+
+MUSIC_FOLDER = r"c:\Users\bekaz\OneDrive\Рабочий стол\New Folder\labs\lab7\sounds"
+
+
+if not os.path.exists(MUSIC_FOLDER):
+    print(f"Ошибка: Папка '{MUSIC_FOLDER}' не найдена!")
+    exit()
+
+
+sounds = [os.path.join(MUSIC_FOLDER, f) for f in os.listdir(MUSIC_FOLDER) if f.endswith(".mp3")]
+
+
+if not sounds:
+    print(f"Ошибка: В папке '{MUSIC_FOLDER}' нет MP3-файлов!")
+    exit()
+
+index = 0  
+isPaused = False
+isPlayed = False  
+
+running = True
+
+while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            isDone = False
+            running = False
             pygame.quit()
 
+        
         if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-            if index == len(sounds) - 1:
-                index = 0
-            else: index += 1
-
+            index = (index + 1) % len(sounds)
             isPaused = False
             isPlayed = True
+        
+        
         if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-            if index == 0:
-                index = len(sounds) - 1
-            else:
-                index -= 1
+            index = (index - 1) % len(sounds)
             isPaused = False
             isPlayed = True
 
-        if event.type == pygame.KEYDOWN and isPlayed:
-            if isPaused:
-                pygame.mixer.music.unpause()
-                isPaused = not isPaused
+        
+        if event.type == pygame.KEYDOWN:
+            if isPlayed:
+                if isPaused:
+                    pygame.mixer.music.unpause()
+                    isPaused = False
+                else:
+                    pygame.mixer.music.load(sounds[index])
+                    pygame.mixer.music.play()
             else:
-                pygame.mixer.music.load(sounds[index])
-                pygame.mixer.music.play(0)
+                pygame.mixer.music.pause()
+                isPaused = True
             isPlayed = not isPlayed
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not isPlayed:
+
+        
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             pygame.mixer.music.pause()
-            isPlayed = not isPlayed
-            isPaused = not isPaused
+            isPaused = True
+            isPlayed = False
 
     pygame.display.flip()
